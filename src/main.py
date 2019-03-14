@@ -2,3 +2,63 @@ from database import Database
 
 if __name__ == "__main__":
     db = Database()
+    operations = {
+        "SET": 0,
+        "GET": 1,
+        "UNSET": 2,
+        "COUNT": 3
+    }
+
+    print("Ready for commands:")
+    command = input("> ")
+    while not command.upper() == "END":
+
+
+        commandTokens = command.split()
+        op = None
+        try:
+            op = commandTokens[0]
+        except IndexError:
+            print("Malformed command, no operation specified!")
+
+        if op is not None:
+            #Handle SET operation
+            if op.upper() == "SET":
+                var = None
+                value = None
+                try:
+                    var = commandTokens[1]
+                    value = int(commandTokens[2])
+                    db.SET(var, value)
+                except ValueError:
+                    print("Invalid value, please use an integer!")
+                except IndexError:
+                    print("Malformed command, missing operation parameter!")
+
+            #Handle GET operation
+            if op.upper() == "GET":
+                var = commandTokens[1]
+                value = db.GET(var)
+                if(value):
+                    print(value)
+                else:
+                    print("NULL")
+
+            #Handle UNSET operation
+            if op.upper() == "UNSET":
+                var = commandTokens[1]
+                db.UNSET(var)
+
+            #Handle COUNT operation
+            if op.upper() == "COUNT":
+                value = None
+                try:
+                    value = int(commandTokens[1])
+                    count = db.COUNT(value)
+                    print(count)
+                except ValueError:
+                    print("Invalid value, please use an integer!")
+                except IndexError:
+                    print("Malformed command, missing operation parameter!")
+
+        command = input("> ")
