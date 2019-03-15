@@ -1,4 +1,6 @@
 from database import Database
+from database import InvalidRollbackError
+
 
 if __name__ == "__main__":
     db = Database()
@@ -60,5 +62,20 @@ if __name__ == "__main__":
                     print("Invalid value, please use an integer!")
                 except IndexError:
                     print("Malformed command, missing operation parameter!")
+
+            #Handle BEGIN operation
+            if op.upper() == "BEGIN":
+                db.BEGIN()
+
+            #Handle ROLLBACK operation
+            if op.upper() == "ROLLBACK":
+                try:
+                    db.ROLLBACK()
+                except InvalidRollbackError as err:
+                    print(err.message)
+
+            #Handle COMMIT operation
+            if op.upper() == "COMMIT":
+                db.COMMIT()
 
         command = input("> ")
