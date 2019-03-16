@@ -1,5 +1,6 @@
 from database import Database
-from iMemDbError import *
+from iMemDbError import InvalidRollbackError
+from iMemDbError import InvalidCommitError
 
 
 if __name__ == "__main__":
