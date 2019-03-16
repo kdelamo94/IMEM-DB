@@ -1,4 +1,6 @@
 from database import Database
+from iMemDbError import *
+
 
 if __name__ == "__main__":
     db = Database()
@@ -36,7 +38,7 @@ if __name__ == "__main__":
                     print("Malformed command, missing operation parameter!")
 
             #Handle GET operation
-            if op.upper() == "GET":
+            elif op.upper() == "GET":
                 try:
                     var = commandTokens[1]
                     value = db.GET(var)
@@ -48,7 +50,7 @@ if __name__ == "__main__":
                     print("Malformed Command, missing operation parameter!")
 
             #Handle UNSET operation
-            if op.upper() == "UNSET":
+            elif op.upper() == "UNSET":
                 try:
                     var = commandTokens[1]
                     db.UNSET(var)
@@ -56,7 +58,7 @@ if __name__ == "__main__":
                     print("Malformed Command, missing operation parameter!")
 
             #Handle COUNT operation
-            if op.upper() == "COUNT":
+            elif op.upper() == "COUNT":
                 value = None
                 try:
                     value = int(commandTokens[1])
@@ -67,4 +69,20 @@ if __name__ == "__main__":
                 except IndexError:
                     print("Malformed command, missing operation parameter!")
 
+            #Handle BEGIN operation
+            elif op.upper() == "BEGIN":
+                db.BEGIN()
+
+            #Handle ROLLBACK operation
+            elif op.upper() == "ROLLBACK":
+                try:
+                    db.ROLLBACK()
+                except InvalidRollbackError as err:
+                    print(err.message)
+
+            #Handle COMMIT operation
+            elif op.upper() == "COMMIT":
+                db.COMMIT()
+            else:
+                print("\"" + op.upper() + "\"" + " IS NOT A VALID COMMAND!")
         command = input("> ")
