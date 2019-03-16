@@ -37,17 +37,23 @@ if __name__ == "__main__":
 
             #Handle GET operation
             if op.upper() == "GET":
-                var = commandTokens[1]
-                value = db.GET(var)
-                if(value):
-                    print(value)
-                else:
-                    print("NULL")
+                try:
+                    var = commandTokens[1]
+                    value = db.GET(var)
+                    if(value):
+                        print(value)
+                    else:
+                        print("NULL")
+                except IndexError:
+                    print("Malformed Command, missing operation parameter!")
 
             #Handle UNSET operation
             if op.upper() == "UNSET":
-                var = commandTokens[1]
-                db.UNSET(var)
+                try:
+                    var = commandTokens[1]
+                    db.UNSET(var)
+                except IndexError:
+                    print("Malformed Command, missing operation parameter!")
 
             #Handle COUNT operation
             if op.upper() == "COUNT":
