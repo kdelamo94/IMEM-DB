@@ -8,6 +8,10 @@ class InvalidRollbackError(Error):
     def __init__(self, message):
         self.message = message
 
+class InvalidCommitError(Error):
+    def __init__(self, message):
+        self.message = message
+
 class Database:
     def __init__(self):
 
@@ -34,12 +38,10 @@ class Database:
             self.valueCount[self.database[var]] -= 1
             self.database[var] = None
 
-
     def GET(self, var):
         if var not in self.database:
             return None
         return self.database[var]
-
 
     def COUNT(self, value):
         return self.valueCount[value]
@@ -59,5 +61,7 @@ class Database:
             raise InvalidRollbackError("INVALID ROLLBACK")
 
     def COMMIT(self):
+        if not self.transactionStack:
+            raise InvalidCommitError("NOTHING TO COMMIT")
         while not self.transactionStack:
             self.transactionStack.pop()
